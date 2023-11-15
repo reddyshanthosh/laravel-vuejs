@@ -1,0 +1,38 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js  --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "devDependencies": {
+    "alpinejs": "^2.8.0",
+    "axios": "^0.27.2",
+    "bootstrap": "^4.5.3",
+    "cross-env": "^7.0",
+    "deepmerge": "^2.2.1",
+    "jquery": "^3.4.1",
+    "laravel-mix": "^6.0.6",
+    "laravel-mix-tailwind": "^0.1.1",
+    "material-design-icons-iconfont": "^4.0.5",
+    "postcss": "^8.2.1",
+    "postcss-import": "^12.0.1",
+    "resolve-url-loader": "^2.3.1",
+    "sass": "^1.59.2",
+    "sass-loader": "^13.2.0",
+    "tailwindcss": "^2.0.3",
+    "vue": "^2.6.12",
+    "vue-flash-message": "^0.7.2",
+    "vue-loader": "^15.9.6",
+    "vue-template-compiler": "^2.6.12",
+    "vuetify": "^2.5.11",
+    "xlsx": "^0.15.2"
+  },
+  "dependencies": {
+    "vee-validate": "^3.4.5"
+  }
+}
