@@ -11,8 +11,9 @@
 * git clone git@uisgithub1.uis.edu:tllos1/foods.git /tmp/html
 * \cp -RP /tmp/html  /var/www/
 * rm -rf /tmp/html
-
+* composer update
+* npm install && npm run dev
 * php artisan migrate
 * php artisan db:seed --class=Foodseeder
 
-* http://10.89.38.36/api/foods
+# http://10.89.38.36/api/foods
