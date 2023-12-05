@@ -31,8 +31,24 @@ use App\Http\Resources\FoodsResource;
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+    {  
+        $this->validate($request,[
+        'name' => 'required|max:255',
+        'calories' => 'required|max:255',
+        'fat' => 'required|max:255',
+        'carbs'=> 'max:255',
+        'protein' => 'required|max:255',
+        'iron' => 'required|max:255',] );
+
+        $food = new Foods;
+        $food->name = $request->name;
+        $food->calories = $request->calories;
+        $food->fat = $request->fat;
+        $food->carbs = $request->carbs;
+        $food->protein = $request->protein;
+        $food->iron = $request->iron;
+        $food->save();
+        return new FoodsResource($food);
     }
 
     /**
@@ -56,7 +72,23 @@ use App\Http\Resources\FoodsResource;
      */
     public function update(Request $request, string $id)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|max:255',
+            'calories' => 'required|max:255',
+            'fat' => 'required|max:255',
+            'carbs'=> 'max:255',
+            'protein' => 'required|max:255',
+            'iron' => 'required|max:255',] );
+            
+            $food = Foods::find($id);
+            $food->name = $request->name;
+            $food->calories = $request->calories;
+            $food->fat = $request->fat;
+            $food->carbs = $request->carbs;
+            $food->protein = $request->protein;
+            $food->iron = $request->iron;
+            $food->save();
+            return new FoodsResource($food);
     }
 
     /**
@@ -64,6 +96,13 @@ use App\Http\Resources\FoodsResource;
      */
     public function destroy(string $id)
     {
-        //
+        $food = Foods::find($id);
+        $deleted = $food->delete();
+        if ($deleted) {
+            return response()->json(['message'=>'Successfully Deleted'],200);
+        }
+        else {
+            return response()->json(['message'=>'Error occurred'],404);
+        }
     }
 }
