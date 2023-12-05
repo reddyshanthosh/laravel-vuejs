@@ -8,6 +8,11 @@
 					
 					<v-btn color="primary" dark class="my-2" @click="dialog_add=true">Add Food</v-btn>
 					
+                       <template v-slot:item.action="{ item }">
+                            <v-icon small color="teal" @click="showForm(item)" title="Edit" class="mr-2">mdi-pencil</v-icon>
+                            <v-icon small color="pink" @click="deleteItem(item)" title="Delete">mdi-delete</v-icon>
+                        </template>
+
 					
 				##################		
 					
@@ -115,7 +120,12 @@
 									name: '',
 								   
 						},
-				
+			
+              showForm: function (item) {
+                    this.index = this.desserts.indexOf(item);
+                    this.updateItem = Object.assign({}, item);
+                    this.dialog_update = true;
+                },
 
 			 close_add () {
                 this.validationErrors = '';
@@ -152,7 +162,7 @@
                 await axios.post('/' + this.app_name + 'api/foods', item)
                     .then(response => {
                 if(response.status === 201) {
-                        this.Results.push(response.data);
+                        this.desserts.push(response.data);
                  this.snackbar = true;
                         this.snackcolor = 'success';
                         this.snacktext = 'Your Food has been been saved.';
@@ -202,7 +212,7 @@
     
                             await axios.put('/' + this.app_name + 'api/foods/' + item.id, item).then(response => {
                                 if(response.status === 201 || response.status === 200) {
-                                    Object.assign(this.Results[this.index], response.data)
+                                    Object.assign(this.desserts[this.index], response.data)
                                     this.loadingUpdate = false;
                                     this.close_update();
     
