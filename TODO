@@ -1,0 +1,255 @@
+			
+					
+					 <v-snackbar v-model="snackbar" :timeout="5000" :color="snackcolor">
+						{{ snacktext }}
+						<v-btn color="white" text @click="snackbar = false">Close</v-btn>
+					</v-snackbar>
+					
+					
+					<v-btn color="primary" dark class="my-2" @click="dialog_add=true">Add Food</v-btn>
+					
+					
+				##################		
+					
+					    <v-dialog v-model="dialog_add" class="w-full md:w-1/2">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Add Food:</span>
+                        <v-spacer></v-spacer>
+                        <v-divider vertical class="mx-4"></v-divider>
+                        <v-icon @click="close_add">mdi-close</v-icon>
+                    </v-card-title>
+                    <v-divider></v-divider>
+                        <div v-if="validationErrors">
+                            <ul role="alert" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
+                                <li v-for="(value, key, index) in validationErrors">{{ value }}</li>
+                            </ul>
+                        </div>
+                    <v-divider></v-divider>
+                    <v-card-text>
+    
+                <div class="px-2">
+                                <div class="flex flex-wrap justify-start content-center -mx-2 p-8">
+    
+                                    <div class="w-full md:w-5/5 px-2">
+                                    <v-text-field outlined prepend-inner-icon="person"
+                                        v-model="addedItem.name"
+                                        label="Name">
+                                    </v-text-field>
+                                    </div>
+                                </div>
+                </div>
+    
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn :loading="loadingStore" color="blue darken-1" @click="store(addedItem)">Save</v-btn>
+                        <v-btn outlined color="error" @click="close_add">Cancel</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+    
+	##################
+	
+    <v-dialog v-model="dialog_update" class="w-full md:w-1/2">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Update Food:</span>
+                        <v-spacer></v-spacer>
+                        <v-divider vertical class="mx-4"></v-divider>
+                        <v-icon @click="close_update">mdi-close</v-icon>
+                    </v-card-title>
+                    <v-divider></v-divider>
+                        <div v-if="validationErrors">
+                            <ul role="alert" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
+                                <li v-for="(value, key, index) in validationErrors">{{ value }}</li>
+                            </ul>
+                        </div>
+                    <v-divider></v-divider>
+                    <v-card-text>
+    
+                            <div class="px-2">
+                                <div class="flex flex-wrap justify-start content-center -mx-2 p-8">
+    
+                                    <div class="w-full md:w-5/5 px-2">
+                                    <v-text-field outlined prepend-inner-icon="person"
+                                        v-model="updateItem.name"
+                                        label="Name">
+                                    </v-text-field>
+                                    </div>
+                                </div>
+                            </div>
+    
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn :loading="loadingUpdate" color="blue darken-1" @click="update(updateItem)">Save</v-btn>
+                        <v-btn outlined color="error" @click="close_update">Cancel</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+					
+					#######################################################################################################################
+					
+					validationErrors: '',
+					snackbar: false,
+                    snackcolor: '',
+                    snacktext: '',
+					dialog_add: false,
+				    dialog_update: false,
+					    loadingStore: false,
+						loadingUpdate: false,
+					
+						defaultItem: {
+									id: '',
+									name: '',
+									
+						},
+						addedItem: {
+									id: '',
+									name: '',
+									
+						},
+						updateItem: {
+									id: '',
+									name: '',
+								   
+						},
+				
+
+			 close_add () {
+                this.validationErrors = '';
+                this.dialog_add = false
+                this.addedItem = Object.assign({}, this.defaultItem);
+            },
+                close_update () {
+                this.validationErrors = '';
+                this.dialog_update = false
+            },
+
+				
+					    deleteItem: function(item) {
+						confirm('Are you sure you want to delete this Food?')
+						axios.delete('/' + this.app_name + 'api/foods/' + item.id)
+						.then(response => {
+						if(response.status === 200) {
+								this.desserts.splice(this.desserts.indexOf(item), 1);
+						this.snackbar = true;
+                        this.snackcolor = 'success';
+                        this.snacktext = 'The Food was removed successfully.';
+                        }
+                         else
+                                {
+                                    this.snackbar = true;
+                                    this.snackcolor = 'error';
+                                    this.snacktext = 'An error occurred.  The Food was not removed.';
+                                }
+                    })
+			},
+			
+			
+			async store(item) {
+                await axios.post('/' + this.app_name + 'api/foods', item)
+                    .then(response => {
+                if(response.status === 201) {
+                        this.Results.push(response.data);
+                 this.snackbar = true;
+                        this.snackcolor = 'success';
+                        this.snacktext = 'Your Food has been been saved.';
+                        this.close_add()
+                }
+             else
+                    {
+                                    this.loadingStore = false;
+                                    this.close_add();
+                    this.snackbar = true;
+                    this.snackcolor = 'error';
+                    this.snacktext = 'Your Food did NOT save.  Please logout and try again.';
+                    }
+                    })
+         .catch((error) => {
+                        // Error
+                        if (error.response) {
+                            // The request was made and the server responded with a status code
+                            // that falls out of the range of 2xx
+                            if (error.response.status == 422) {
+                                this.snackbar = true;
+                                this.snackcolor = 'error';
+                                this.snacktext = 'Validation error.  See above.';
+                                this.validationErrors = error.response.data.errors;
+                            }
+                else if (error.response.status == 401) {
+                                this.snackbar = true;
+                                this.snackcolor = 'error';
+                                this.snacktext = 'Unauthorized - Please close your browser and log in again.';
+                                this.validationErrors = "Unauthorized - Please close your browser and log in again.";
+                            } 
+                        } else if (error.request) {
+                            // The request was made but no response was received
+                            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                            // http.ClientRequest in node.js
+    
+                        } else {
+                            // Something happened in setting up the request that triggered an Error
+    
+                        }
+                                this.loadingStore = false;
+                    })
+        },
+        async update(item) {		
+                        if (this.index > -1) {
+                            this.loadingUpdate = true;
+    
+                            await axios.put('/' + this.app_name + 'api/foods/' + item.id, item).then(response => {
+                                if(response.status === 201 || response.status === 200) {
+                                    Object.assign(this.Results[this.index], response.data)
+                                    this.loadingUpdate = false;
+                                    this.close_update();
+    
+                        this.snackbar = true;
+                        this.snackcolor = 'success';
+                        this.snacktext = 'Your Food has been updated.';
+    
+                                }
+                    else
+                    {
+                                    this.loadingUpdate = false;
+                                    this.close_update();
+                    this.snackbar = true;
+                    this.snackcolor = 'error';
+                    this.snacktext = 'Your Food did NOT save.  Please logout and try again.';
+                    }})
+            .catch((error) => {
+                        // Error
+                        if (error.response) {
+                            // The request was made and the server responded with a status code
+                            // that falls out of the range of 2xx
+                            if (error.response.status == 422) {
+                                this.snackbar = true;
+                                this.snackcolor = 'error';
+                                this.snacktext = 'Validation error.  See above.';
+                                this.validationErrors = error.response.data.errors;
+                            }
+                            else if (error.response.status == 401) {
+                                this.snackbar = true;
+                                this.snackcolor = 'error';
+                                this.snacktext = 'Unauthorized - Please close your browser and log in again.';
+                                this.validationErrors = "Unauthorized - Please close your browser and log in again.";
+                            }
+                        } else if (error.request) {
+                            // The request was made but no response was received
+                            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                            // http.ClientRequest in node.js
+    
+                        } else {
+                            // Something happened in setting up the request that triggered an Error
+    
+                        }
+                                this.loadingUpdate = false;
+                    });
+                        } else {
+                            console.log('updated data');
+                            console.log(this.updateItem);
+                        }
+                    
+                },
