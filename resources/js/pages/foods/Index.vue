@@ -33,10 +33,10 @@
                   <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="editedItem.Iron" label="Iron (g)"></v-text-field>
+                  <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                  <v-text-field v-model="editedItem.iron" label="Iron (g)"></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -117,6 +117,10 @@ export default {
         value: 'protein'
       },
       {
+        text: 'Iron (g)',
+        value: 'iron'
+      },
+      {
         text: 'Actions',
         value: 'actions',
         sortable: false
@@ -130,6 +134,8 @@ export default {
       fat: 0,
       carbs: 0,
       protein: 0,
+      iron:0
+
     },
     defaultItem: {
       name: '',
@@ -137,6 +143,7 @@ export default {
       fat: 0,
       carbs: 0,
       protein: 0,
+      iron:0
     },
   }),
 
@@ -200,7 +207,7 @@ export default {
       this.closeDelete()
     },
 
-    close() {
+    close() { 
       this.dialog = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
@@ -216,11 +223,25 @@ export default {
       })
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
       } else {
+        console.log(this.editedItem)
+        await axios.post('api/foods/' + this.editedItem).then(response => {
+          if (response.status === 200) {
+            this.desserts.splice(this.editedIndex, 1)
+            this.snackbar = true;
+            this.snackcolor = 'success';
+            this.snacktext = 'The Food was added successfully.';
+          } else {
+            this.snackbar = true;
+            this.snackcolor = 'error';
+            this.snacktext = 'An error occurred.  The Food was not added.';
+          }
+        })
         this.desserts.push(this.editedItem)
+        console.log(this.desserts)
       }
       this.close()
     },
