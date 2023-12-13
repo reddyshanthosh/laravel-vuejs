@@ -231,7 +231,7 @@ export default {
             this.desserts.splice(this.editedIndex, 1)
             this.snackbar = true;
             this.snackcolor = 'success';
-            this.snacktext = 'The Food was added successfully.';
+            this.snacktext = 'The Food was edited successfully.';
           } else {
             this.snackbar = true;
             this.snackcolor = 'error';
@@ -242,7 +242,7 @@ export default {
       } else {
         console.log(this.editedItem)
         await axios.post('api/foods/', this.editedItem).then(response => {
-          if (response.status === 200) {
+          if (response.status === 201) {
             this.desserts.splice(this.editedIndex, 1)
             this.snackbar = true;
             this.snackcolor = 'success';
