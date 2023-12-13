@@ -129,6 +129,7 @@ export default {
     desserts: [],
     editedIndex: -1,
     editedItem: {
+      id: 0,
       name: '',
       calories: 0,
       fat: 0,
@@ -242,8 +243,10 @@ export default {
       } else {
         console.log(this.editedItem)
         await axios.post('api/foods/', this.editedItem).then(response => {
+          console.log('this is the response', response.data)
           if (response.status === 201) {
             this.desserts.splice(this.editedIndex, 1)
+            this.editedItem = response.data;
             this.snackbar = true;
             this.snackcolor = 'success';
             this.snacktext = 'The Food was added successfully.';
