@@ -1,6 +1,17 @@
 <template>
 <div>
-  <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+  <v-card>
+    <v-card-title>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+  </v-card>
+  <v-data-table :headers="headers" :items="desserts" :search="search" sort-by="calories" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>My CRUD</v-toolbar-title>
@@ -94,6 +105,7 @@ export default {
     snackbar: false,
     snackcolor: '',
     snacktext: '',
+    search: '',
     headers: [{
         text: 'Dessert (100g serving)',
         align: 'start',
