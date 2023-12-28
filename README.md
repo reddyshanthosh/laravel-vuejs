@@ -1,4 +1,4 @@
-This code repository was created to demonstrates the understanding of 
+This code repository was created to demonstrate the understanding of 
 the basic components in laravel, vuetify and vuejs. it includes the CRUD operations and
 utilization of vuetify components. 
 
