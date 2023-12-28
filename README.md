@@ -1,19 +1,16 @@
-# Follow the Laravel Documentation setup:
-* macOS: https://laravel.com/docs/10.x#sail-on-macos
-* Windows: https://laravel.com/docs/10.x#sail-on-windows
-
-# Install Docker
-* curl -s "https://laravel.build/example-app" | bash
-* cd example-app
-* ./vendor/bin/sail up
+This code repository was created to demonstrates the understanding of 
+the basic components in laravel, vuetify and vuejs. it includes the CRUD operations and
+utilization of vuetify components. 
 
 # Code
-* git clone git@uisgithub1.uis.edu:tllos1/foods.git /tmp/html
-* \cp -RP /tmp/html  /var/www/
-* rm -rf /tmp/html
+* git clone https://github.com/reddyshanthosh/laravel-vuejs.git
 * composer update
 * npm install && npm run dev
 * php artisan migrate
 * php artisan db:seed --class=Foodseeder
+* php artisan serve #for starting laravel backend server
+* npm run dev #for starting vuejs front end server
+* npm run watch #for starting and automatically refresh while making changes
 
-# http://10.89.38.36/api/foods
+
+# add url to the browser to test, http://127.0.0.1:8000/foods
